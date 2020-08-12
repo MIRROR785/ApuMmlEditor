@@ -3,13 +3,17 @@ ApuMmlEditor
 
 疑似APUによるMMLプレイヤーである[ApuMmlPlayer]向けの簡易MMLエディタ及びプレイヤーです。
 
-AudioContextに対応したブラウザ上で利用可能です。
+GitHub Pagesの[ApuMmlEditor]にて公開しています。
+
+AudioContextに対応したブラウザで参照してください。
 
 MMLのコマンドは部分的なサポートです。
 
 A simple MML editor and player for [ApuMmlPlayer].
 
-It is available on AudioContext compatible browsers.
+It is available at [ApuMmlEditor] on GitHub Pages.
+
+Refer to it AudioContext compatible browser.
 
 MML commands are partially supported.
 
@@ -20,4 +24,5 @@ Copyright &copy; 2020 @MIRROR_
 Distributed under the [MIT].  
 
 [MIT]: http://www.opensource.org/licenses/mit-license.php "MIT License"
-[ApuMmlPlayer]: https://github.com/MIRROR785/ApuMmlPlayer "ApuMmlPlayer 疑似APUによるMMLプレイヤー"
+[ApuMmlPlayer]: https://github.com/MIRROR785/ApuMmlPlayer/ "ApuMmlPlayer 疑似APUによるMMLプレイヤー"
+[ApuMmlEditor]: https://mirror785.github.io/ApuMmlEditor/ "ApuMmlEditor 簡易MMLエディタ及びプレイヤー"
