@@ -42,6 +42,9 @@ class ApuMmlPlayer
         /** @var AudioMixer オーディオミキサー */
         this.mixer = null;
 
+        /** @var AudioPacker オーディオパッカー */
+        this.packer = null;
+
         if (config !== null) {
             this.setup(config);
         }

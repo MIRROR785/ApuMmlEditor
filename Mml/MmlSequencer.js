@@ -391,7 +391,8 @@ class MmlSequencer
                         let device = apu.devices[tr];
                         if (device !== undefined) {
                             if (status.key_no !== MmlConst.KNO_R) {
-                                device.setVoice(status.voice);
+                                // TODO : 音色設定
+                                //device.setVoice(status.voice);
                                 device.setVolume(status.volume);
                                 device.noteOn(AudioConst.getNoteNo(status.key_octave, status.key_no));
                             } else {
