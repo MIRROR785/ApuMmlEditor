@@ -23,8 +23,9 @@
 <header>
 <h1><a href='https://github.com/MIRROR785/ApuMmlEditor/'>ApuMmlEditor</a></h1>
 </header>
-<section>
-<textarea id='editor' class='editor' spellcheck='false'>
+<h2>MML</h2>
+<section id='mml'>
+<textarea id='mml-editor' class='editor' spellcheck='false'>
 #Title ICE BALLER - Penguin
 #Composer Alma
 #Arranger @MIRROR_
@@ -33,12 +34,214 @@ TR1 l8 Lo6rgggggab>c<afarab>cd<gr>frfede<g>cerrrrr<gggggab>c<a>cfrfffggggggggfff
 TR2 l8 Lo4cc<g>ccc<g>cffcfffcfgbb>ddd<bgcc<g>ccc<g>ccc<g>ccc<g>cffffg+g+g+g+ggb>d<ggb>d<ccefffed
 TR3 l8 Lo6reeeeefgafcfrfgabdr>drdc<b>c<da>crrrrr<eeeeefgafa>crcccdededef<b>c<gb>ccc<ba
 </textarea>
-<button id='play'>Play</button>
-<button id='stop'>Stop</button>
+<button id='play-start'>Play</button>
+<button id='play-stop'>Stop</button>
+<article id='config-view'>
+<fieldset class='inline'>
+	<legend>Master</legend>
+	<label for='master-volume'>Volume</label>
+	<select id='master-volume' name='master-volume'>
+		<option value='0'>--</option>
+		<option value='0.2'>1</option>
+		<option value='0.4'>2</option>
+		<option value='0.6'>3</option>
+		<option value='0.8'>4</option>
+		<option value='1.0'>5</option>
+		<option value='1.2'>6</option>
+		<option value='1.4'>7</option>
+		<option value='1.6'>8</option>
+		<option value='1.8'>9</option>
+		<option value='2.0'>10</option>
+		<option value='2.2'>11</option>
+		<option value='2.4'>12</option>
+		<option value='2.6'>13</option>
+		<option value='2.8'>14</option>
+		<option value='3.0'>15</option>
+	</select>
+	<label for='master-loop'>Loop</label>
+	<select id='master-loop' name='master-loop'>
+		<option value='0'>--</option>
+		<option>1</option>
+		<option>2</option>
+	</select>
+</fieldset>
+<fieldset class='inline'>
+	<legend>Track1</legend>
+	<label for='track1-voice'>Voice</label>
+	<select id='track1-voice' name='track1-voice'>
+		<option value='-1'>-----</option>
+		<option value='0'>0:&nbsp;Duty12.5%</option>
+		<option value='1'>1:&nbsp;Duty25%</option>
+		<option value='2'>2:&nbsp;Duty50%</option>
+		<option value='3'>3:&nbsp;Duty75%</option>
+	</select>
+</fieldset>
+<fieldset class='inline'>
+	<legend>Track2</legend>
+	<label for='track2-voice'>Voice</label>
+	<select id='track2-voice' name='track2-voice'>
+		<option value='-1'>-----</option>
+		<option value='0'>0:&nbsp;Duty12.5%</option>
+		<option value='1'>1:&nbsp;Duty25%</option>
+		<option value='2'>2:&nbsp;Duty50%</option>
+		<option value='3'>3:&nbsp;Duty75%</option>
+	</select>
+</fieldset>
+</article>
 </section>
-<section>
-
+<h2>Mini keyboard</h2>
+<section id='mini-keyboard'>
+<div id='track-view'>
+	<div id='track-editor-caret'></div>
+	<textarea id='track-editor' class='editor' spellcheck='false'></textarea>
+</div>
+<fieldset class='inline'>
+	<legend>Audio</legend>
+	<label for='audio-device'>Device</label>
+	<select id='audio-device' name='audio-device'>
+		<option value='-1'>-----</option>
+		<option value='0'>Pulse</option>
+		<option value='1'>Triangle</option>
+		<option value='2'>Noise</option>
+	</select>
+	<label for='audio-voice'>Voice</label>
+	<select id='audio-voice' name='audio-voice'>
+		<option value='-1'>-----</option>
+		<option value='0'>0:&nbsp;Duty12.5%</option>
+		<option value='1'>1:&nbsp;Duty25%</option>
+		<option value='2'>2:&nbsp;Duty50%</option>
+		<option value='3'>3:&nbsp;Duty75%</option>
+	</select>
+	<label for='audio-tempo'>Tempo</label>
+	<input id='audio-tempo' type='number' min='1' max='360'/>
+	<label for='audio-volume'>Volume</label>
+	<select id='audio-volume' name='audio-volume'>
+		<option value='0'>--</option>
+		<option>1</option>
+		<option>2</option>
+		<option>3</option>
+		<option>4</option>
+		<option>5</option>
+		<option>6</option>
+		<option>7</option>
+		<option>8</option>
+		<option>9</option>
+		<option>10</option>
+		<option>11</option>
+		<option>12</option>
+		<option>13</option>
+		<option>14</option>
+		<option>15</option>
+	</select>
+	<label for='audio-octave'>Octave</label>
+	<select id='audio-octave' name='audio-octave'>
+		<option value='0'>--</option>
+		<option>1</option>
+		<option>2</option>
+		<option>3</option>
+		<option>4</option>
+		<option>5</option>
+		<option>6</option>
+		<option>7</option>
+		<option>8</option>
+		<option>9</option>
+	</select>
+	<label for='audio-length'>Length</label>
+	<select id='audio-length' name='audio-length'>
+		<option value='0'>--</option>
+		<option>1</option>
+		<option>2</option>
+		<option>4</option>
+		<option>8</option>
+		<option>16</option>
+		<option>32</option>
+	</select>
+</fieldset>
+<fieldset class='inline'>
+	<legend>Current</legend>
+	<label for='current-volume'>Volume</label>
+	<select id='current-volume' name='current-volume'>
+		<option value='0'>--</option>
+		<option>1</option>
+		<option>2</option>
+		<option>3</option>
+		<option>4</option>
+		<option>5</option>
+		<option>6</option>
+		<option>7</option>
+		<option>8</option>
+		<option>9</option>
+		<option>10</option>
+		<option>11</option>
+		<option>12</option>
+		<option>13</option>
+		<option>14</option>
+		<option>15</option>
+	</select>
+	<button class='key-ctrl' id='key-up'>&uarr;</button>
+	<button class='key-ctrl' id='key-down'>&darr;</button>
+	<label for='current-octave'>Octave</label>
+	<select id='current-octave' name='current-octave'>
+		<option value='0'>--</option>
+		<option>1</option>
+		<option>2</option>
+		<option>3</option>
+		<option>4</option>
+		<option>5</option>
+		<option>6</option>
+		<option>7</option>
+		<option>8</option>
+		<option>9</option>
+	</select>
+	<button class='key-ctrl' id='key-left'>&larr;</button>
+	<button class='key-ctrl' id='key-right'>&rarr;</button>
+	<label for='current-length'>Length</label>
+	<select id='current-length' name='current-length'>
+		<option value='0'>--</option>
+		<option>1</option>
+		<option>2</option>
+		<option>4</option>
+		<option>8</option>
+		<option>16</option>
+		<option>32</option>
+	</select>
+</fieldset>
+<div id='keyboard-view'>
+	<div id='keyboard'>
+		<div>
+			<button class='key-ctrl' id='key-octave-down'>&lt;<div>[A]</div></button>
+			<button class='key-sharp' id='key-cs'>C#<div>[S]</div></button>
+			<button class='key-sharp' id='key-ds'>D#<div>[D]</div></button>
+			<button class='key-sharp' id='key-fs'>F#<div>[G]</div></button>
+			<button class='key-sharp' id='key-gs'>G#<div>[H]</div></button>
+			<button class='key-sharp' id='key-as'>A#<div>[J]</div></button>
+			<button class='key-ctrl' id='key-octave-up'>&gt;<div>[K]</div></button>
+		</div>
+		<div>
+			<button class='key-scale' id='key-c'>C<div>[Z]</div></button>
+			<button class='key-scale' id='key-d'>D<div>[X]</div></button>
+			<button class='key-scale' id='key-e'>E<div>[C]</div></button>
+			<button class='key-scale' id='key-f'>F<div>[V]</div></button>
+			<button class='key-scale' id='key-g'>G<div>[B]</div></button>
+			<button class='key-scale' id='key-a'>A<div>[N]</div></button>
+			<button class='key-scale' id='key-b'>B<div>[M]</div></button>
+			<button class='key-scale' id='key-uc'>&gt;C<div>[,]</div></button>
+			<button class='key-ctrl' id='key-volume-down'>(<div>[/]</div></button>
+			<button class='key-ctrl' id='key-volume-up'>)<div>[&yen;]</div></button>
+		</div>
+	</div>
+	<div id='control'>
+		<button class='key-ctrl' id='key-del'>Delete</button>
+		<button class='key-ctrl' id='key-bs'>Backspace</button>
+		<button class='key-ctrl' id='key-enter'>Replay<div>[Enter]</div></button>
+	</div>
+</div>
 </section>
+<!--
+<h2>Free</h2>
+<section id='free'>
+</section>
+-->
 <footer>
 Copyright &copy; 2020 @MIRROR_
 </footer>
