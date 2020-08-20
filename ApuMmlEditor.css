@@ -1,6 +1,8 @@
 @charset "utf-8";
+body {/*margin:0.5%;*/ margin:0; padding:0; font-size:1em;}
 button,input,select,textarea {font-family:inherit; font-size:100%;}
-body {margin:0.5%;}
+textarea {max-height:100%;}
+fieldset {padding:0.25em;}
 header {background-color:gray; color:white; padding-left:0.5em;}
 footer {background-color:gray; color:white; padding-left:0.5em;}
 
@@ -11,21 +13,26 @@ h2 {background-color:lightgray; color:white; font-size:1.25em; margin:0; padding
 h2>a {color:white;}
 .inline {display: inline-block;}
 
-.editor {width:99.5%;}
-#mml-editor {height:10em; font-family:monospace, serif;}
-#track-view {position:relative; height:1.5em;}
-#track-editor {position:absolute; top:0; left:0; height:1em; font-family:monospace, serif; opacity:0.8;}
-#track-editor-caret {position:absolute; top:0; left:0; background-color:blue; width:0.5em; height:1em; margin:1px 0px 1px 3px; padding:2px 0px 2px 0px; font-family:monospace, serif;}
+#mml-editor {width:98%; height:10em; font-family:monospace, serif; font-size:1em;}
 #audio-tempo {width: 3em;}
 
-#keyboard-view {margin:0.5em}
-#keyboard {width:30em; float:left;}
-#control {height:8em;}
-.key-sharp {background-color:black; color:white;}
-.key-scale {background-color:white; color:black;}
+#track-view {margin:0; padding:0;}
+#track-tiny-editor {margin:0.5em 0.5em 0.7em 0.5em; padding:0; width:98%; height:3em; font-family:monospace, serif; border:solid 1px black; overflow:auto;}
+.track-content {font-family:monospace, serif; font-size:1em;}
+#track-content-selection {background-color:lightblue;}
+#track-content-caret {background-color:lightblue;}
+#track-text-editor {margin:0.5em 0.5em 0 0.5em; padding:0; width:98%; height:3em; font-family:monospace, serif; font-size:1em;}
+
+#keyboard-view {margin:0 0.5em 0.5em 0.5em;}
+.keyboard {margin:0.25em;}
+.control {margin-top:0.25em; display:inline-block;}
+.key-assign {font-size:80%;}
+.key-sharp {background-color:black; color:white; width:2.25em;}
+.key-scale {background-color:white; color:black; width:2.25em;}
+.key-updown {padding:0; width:2em; font-size:0.8em;}
 .key-down {background-color:lightpink; color:black;}
-#key-c {margin-left:1em;}
-#key-fs {margin-left:2em;}
-#key-del {display: block;}
-#key-bs {display: block;}
-#key-enter {display: block;}
+.key-fs {margin-left:2em;}
+#key-volume-up {margin-left:2.25em;}
+#key-octave-up {margin-left:2.25em;}
+#key-del {margin-left:0.5em;}
+#key-replay {margin-left:0.5em;}

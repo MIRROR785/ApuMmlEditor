@@ -2,6 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0">
 <title>ApuMmlEditor</title>
 <script src="Audio/AudioConst.js"></script>
 <script src="Audio/AudioDevice.js"></script>
@@ -34,8 +35,10 @@ TR1 l8 Lo6rgggggab>c<afarab>cd<gr>frfede<g>cerrrrr<gggggab>c<a>cfrfffggggggggfff
 TR2 l8 Lo4cc<g>ccc<g>cffcfffcfgbb>ddd<bgcc<g>ccc<g>ccc<g>ccc<g>cffffg+g+g+g+ggb>d<ggb>d<ccefffed
 TR3 l8 Lo6reeeeefgafcfrfgabdr>drdc<b>c<da>crrrrr<eeeeefgafa>crcccdededef<b>c<gb>ccc<ba
 </textarea>
+<div>
 <button id='play-start'>Play</button>
 <button id='play-stop'>Stop</button>
+</div>
 <article id='config-view'>
 <fieldset class='inline'>
 	<legend>Master</legend>
@@ -91,10 +94,6 @@ TR3 l8 Lo6reeeeefgafcfrfgabdr>drdc<b>c<da>crrrrr<eeeeefgafa>crcccdededef<b>c<gb>
 </section>
 <h2>Mini keyboard</h2>
 <section id='mini-keyboard'>
-<div id='track-view'>
-	<div id='track-editor-caret'></div>
-	<textarea id='track-editor' class='editor' spellcheck='false'></textarea>
-</div>
 <fieldset class='inline'>
 	<legend>Audio</legend>
 	<label for='audio-device'>Device</label>
@@ -178,8 +177,6 @@ TR3 l8 Lo6reeeeefgafcfrfgabdr>drdc<b>c<da>crrrrr<eeeeefgafa>crcccdededef<b>c<gb>
 		<option>14</option>
 		<option>15</option>
 	</select>
-	<button class='key-ctrl' id='key-up'>&uarr;</button>
-	<button class='key-ctrl' id='key-down'>&darr;</button>
 	<label for='current-octave'>Octave</label>
 	<select id='current-octave' name='current-octave'>
 		<option value='0'>--</option>
@@ -193,8 +190,6 @@ TR3 l8 Lo6reeeeefgafcfrfgabdr>drdc<b>c<da>crrrrr<eeeeefgafa>crcccdededef<b>c<gb>
 		<option>8</option>
 		<option>9</option>
 	</select>
-	<button class='key-ctrl' id='key-left'>&larr;</button>
-	<button class='key-ctrl' id='key-right'>&rarr;</button>
 	<label for='current-length'>Length</label>
 	<select id='current-length' name='current-length'>
 		<option value='0'>--</option>
@@ -206,34 +201,63 @@ TR3 l8 Lo6reeeeefgafcfrfgabdr>drdc<b>c<da>crrrrr<eeeeefgafa>crcccdededef<b>c<gb>
 		<option>32</option>
 	</select>
 </fieldset>
+<div id='track-view'>
+	<div id='track-tiny-editor'>
+		<span id='track-content-top' class='track-content'></span><span id='track-content-caret' class='track-content'>&nbsp;</span><span id='track-content-selection' class='track-content'></span><span id='track-content-bottom' class='track-content'></span>
+	</div>
+	<textarea id='track-text-editor' spellcheck='false'></textarea>
+</div>
 <div id='keyboard-view'>
-	<div id='keyboard'>
+	<div class='keyboard'>
 		<div>
-			<button class='key-ctrl' id='key-octave-down'>&lt;<div>[A]</div></button>
-			<button class='key-sharp' id='key-cs'>C#<div>[S]</div></button>
-			<button class='key-sharp' id='key-ds'>D#<div>[D]</div></button>
-			<button class='key-sharp' id='key-fs'>F#<div>[G]</div></button>
-			<button class='key-sharp' id='key-gs'>G#<div>[H]</div></button>
-			<button class='key-sharp' id='key-as'>A#<div>[J]</div></button>
-			<button class='key-ctrl' id='key-octave-up'>&gt;<div>[K]</div></button>
+			<button class='key-updown' id='key-volume-down'>(<div class='key-assign'>[1]</div></button>
+			<button class='key-sharp key-cs' id='key-cs1'>C#<div class='key-assign'>[2]</div></button>
+			<button class='key-sharp key-ds' id='key-ds1'>D#<div class='key-assign'>[3]</div></button>
+			<button class='key-sharp key-fs' id='key-fs1'>F#<div class='key-assign'>[5]</div></button>
+			<button class='key-sharp key-gs' id='key-gs1'>G#<div class='key-assign'>[6]</div></button>
+			<button class='key-sharp key-as' id='key-as1'>A#<div class='key-assign'>[7]</div></button>
+			<button class='key-updown' id='key-volume-up'>)<div class='key-assign'>[9]</div></button>
 		</div>
 		<div>
-			<button class='key-scale' id='key-c'>C<div>[Z]</div></button>
-			<button class='key-scale' id='key-d'>D<div>[X]</div></button>
-			<button class='key-scale' id='key-e'>E<div>[C]</div></button>
-			<button class='key-scale' id='key-f'>F<div>[V]</div></button>
-			<button class='key-scale' id='key-g'>G<div>[B]</div></button>
-			<button class='key-scale' id='key-a'>A<div>[N]</div></button>
-			<button class='key-scale' id='key-b'>B<div>[M]</div></button>
-			<button class='key-scale' id='key-uc'>&gt;C<div>[,]</div></button>
-			<button class='key-ctrl' id='key-volume-down'>(<div>[/]</div></button>
-			<button class='key-ctrl' id='key-volume-up'>)<div>[&yen;]</div></button>
+			<button class='key-scale key-c' id='key-c1'>C<div class='key-assign'>[Q]</div></button>
+			<button class='key-scale key-d' id='key-d1'>D<div class='key-assign'>[W]</div></button>
+			<button class='key-scale key-e' id='key-e1'>E<div class='key-assign'>[E]</div></button>
+			<button class='key-scale key-f' id='key-f1'>F<div class='key-assign'>[R]</div></button>
+			<button class='key-scale key-g' id='key-g1'>G<div class='key-assign'>[T]</div></button>
+			<button class='key-scale key-a' id='key-a1'>A<div class='key-assign'>[Y]</div></button>
+			<button class='key-scale key-b' id='key-b1'>B<div class='key-assign'>[U]</div></button>
+			<button class='key-scale key-uc' id='key-uc1'>C<div class='key-assign'>[I]</div></button>
 		</div>
 	</div>
-	<div id='control'>
-		<button class='key-ctrl' id='key-del'>Delete</button>
-		<button class='key-ctrl' id='key-bs'>Backspace</button>
-		<button class='key-ctrl' id='key-enter'>Replay<div>[Enter]</div></button>
+	<div class='keyboard'>
+		<div>
+			<button class='key-updown' id='key-octave-down'>&lt;<div class='key-assign'>[A]</div></button>
+			<button class='key-sharp key-cs' id='key-cs0'>C#<div class='key-assign'>[S]</div></button>
+			<button class='key-sharp key-ds' id='key-ds0'>D#<div class='key-assign'>[D]</div></button>
+			<button class='key-sharp key-fs' id='key-fs0'>F#<div class='key-assign'>[G]</div></button>
+			<button class='key-sharp key-gs' id='key-gs0'>G#<div class='key-assign'>[H]</div></button>
+			<button class='key-sharp key-as' id='key-as0'>A#<div class='key-assign'>[J]</div></button>
+			<button class='key-updown' id='key-octave-up'>&gt;<div class='key-assign'>[L]</div></button>
+		</div>
+		<div>
+			<button class='key-scale key-c' id='key-c0'>C<div class='key-assign'>[Z]</div></button>
+			<button class='key-scale key-d' id='key-d0'>D<div class='key-assign'>[X]</div></button>
+			<button class='key-scale key-e' id='key-e0'>E<div class='key-assign'>[C]</div></button>
+			<button class='key-scale key-f' id='key-f0'>F<div class='key-assign'>[V]</div></button>
+			<button class='key-scale key-g' id='key-g0'>G<div class='key-assign'>[B]</div></button>
+			<button class='key-scale key-a' id='key-a0'>A<div class='key-assign'>[N]</div></button>
+			<button class='key-scale key-b' id='key-b0'>B<div class='key-assign'>[M]</div></button>
+			<button class='key-scale key-uc' id='key-uc0'>C<div class='key-assign'>[,]</div></button>
+		</div>
+	</div>
+	<div class='control'>
+		<button class='key-ctrl' id='key-left'>&larr;</button>
+		<button class='key-ctrl' id='key-up'>&uarr;</button>
+		<button class='key-ctrl' id='key-down'>&darr;</button>
+		<button class='key-ctrl' id='key-right'>&rarr;</button>
+		<button class='key-ctrl' id='key-del'>DEL</button>
+		<button class='key-ctrl' id='key-bs'>BS</button>
+		<button class='key-ctrl' id='key-replay'>Replay<div class='key-assign'>[Enter]</div></button>
 	</div>
 </div>
 </section>
