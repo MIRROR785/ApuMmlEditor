@@ -1,8 +1,8 @@
 @charset "utf-8";
-body {/*margin:0.5%;*/ margin:0; padding:0; font-size:1em;}
+body {margin:0; padding:0; font-size:1em;}
 button,input,select,textarea {font-family:inherit; font-size:100%;}
 textarea {max-height:100%;}
-fieldset {padding:0.25em;}
+fieldset {padding:0.25em; font-size:80%;}
 header {background-color:gray; color:white; padding-left:0.5em;}
 footer {background-color:gray; color:white; padding-left:0.5em;}
 
@@ -36,3 +36,4 @@ h2>a {color:white;}
 #key-octave-up {margin-left:2.25em;}
 #key-del {margin-left:0.5em;}
 #key-replay {margin-left:0.5em;}
+#key-clear {margin-left:0.5em; font-size:0.8em;}

@@ -156,13 +156,13 @@ window.onload = function(event) {
     const delButton = document.querySelector('#key-del');
     const bsButton = document.querySelector('#key-bs');
     const replayButton = document.querySelector('#key-replay');
+    const clearButton = document.querySelector('#key-clear');
 
     var audio = new ApuMmlPlayer({AudioUnits: [{Name: 'unit0', Devices: [1,3,4]}]});
     audio.sampleTime = 10.0;
     audio.sampleBits = 32;
     var audioUnit = audio.audioUnits['unit0'];
 
-    var audioRefreshSuspend = true;
     audioDevice.value = 0;
     audioVoice.value = 0;
     audioTempo.value = 120;
@@ -172,13 +172,11 @@ window.onload = function(event) {
     currentVolume.value = 5;
     currentOctave.value = 4;
     currentLength.value = 4;
-    audioRefreshSuspend = false;
 
-    function audioRefresh() {
-        if (!audioRefreshSuspend) {
-            
-        }
-    }
+	// TODO : Create OnCycleSound
+	var deviceNotes = [];
+	
+	// TODO : Auto Move octave
 
     const DirectionNone = 'none';
     const DirectionForward ='forward';
@@ -448,19 +446,17 @@ window.onload = function(event) {
 
     var keyDownEvent = null;
     var previousValue = {};
-    previousValue.octave = parseInt(audioOctave.value);
-    previousValue.volume = parseInt(audioVolume.value);
 
-    function resetTrack() {
-        audioRefreshSuspend = true;
+    function clearTrack() {
         previousValue.octave = parseInt(audioOctave.value);
         previousValue.volume = parseInt(audioVolume.value);
+        previousValue.length = parseInt(audioLength.value);
         currentOctave.value = previousValue.octave;
         currentVolume.value = previousValue.volume;
+        currentLength.value = previousValue.length;
         trackContentTop.innerText = '';
         trackContentSelection.innerText = '';
         trackContentBottom.innerText = '';
-        audioRefreshSuspend = false;
     }
 
     function keyDownButton(event) {
@@ -613,10 +609,12 @@ window.onload = function(event) {
     }
 
     upButton.addEventListener('click', () => {
-        //countUpIndex(currentVolume);
+        countUpIndex(audioDevice);
+        replay = null;
     });
     downButton.addEventListener('click', () => {
-        //countDownIndex(currentVolume);
+        countDownIndex(audioDevice);
+        replay = null;
     });
 
     leftButton.addEventListener('click', moveLeftCaret);
@@ -624,6 +622,7 @@ window.onload = function(event) {
     delButton.addEventListener('click', deleteSelectionValue);
     bsButton.addEventListener('click', backspaceSelectionValue);
     replayButton.addEventListener('click', replayStart);
+    clearButton.addEventListener('click', clearTrack);
 
-    audioRefresh();
+    clearTrack();
 }
