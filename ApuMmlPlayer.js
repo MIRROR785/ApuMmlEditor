@@ -400,13 +400,13 @@ class ApuMmlPlayer
 
                 if (!device.isNoteOff()) {
                     let freq = device.getCurrentFrequency();
-                    lcmFrequency = getLcmFrequency(freq, lcmFrequency);
+                    lcmFrequency = ApuMmlPlayer.getLcmFrequency(freq, lcmFrequency);
                 }
             }
         }
 
         // サンプリング初期化
-        let totalSamples = this.sampleRate / getGcdFrequency(lcmFrequency, this.sampleRate);
+        let totalSamples = this.sampleRate / ApuMmlPlayer.getGcdFrequency(lcmFrequency, this.sampleRate);
         let data = audioCtx.createBuffer(this.channelCount, totalSamples, this.sampleRate);
         this.packer.reset(data);
 

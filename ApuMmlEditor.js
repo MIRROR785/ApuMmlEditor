@@ -36,6 +36,7 @@ window.onload = function(event) {
     const mmlEditor = document.querySelector('#mml-editor');
     const playStartButton = document.querySelector('#play-start');
     const playStopButton = document.querySelector('#play-stop');
+    const mmlClearButton = document.querySelector('#mml-clear');
     const masterVolume = document.querySelector('#master-volume');
     const masterLoop = document.querySelector('#master-loop');
     const track1Voice = document.querySelector('#track1-voice');
@@ -94,8 +95,13 @@ window.onload = function(event) {
         }
     }
 
+    function mmlClear() {
+        mmlEditor.value = '';
+    }
+
     playStartButton.addEventListener('click', playStart);
     playStopButton.addEventListener('click', playStop);
+    mmlClearButton.addEventListener('click', mmlClear);
 
 
     // Mini keyboard and Track editor
@@ -156,27 +162,76 @@ window.onload = function(event) {
     const delButton = document.querySelector('#key-del');
     const bsButton = document.querySelector('#key-bs');
     const replayButton = document.querySelector('#key-replay');
+    const keyMuteCheckbox = document.querySelector('#key-mute');
     const clearButton = document.querySelector('#key-clear');
 
-    var audio = new ApuMmlPlayer({AudioUnits: [{Name: 'unit0', Devices: [1,3,4]}]});
+    var audio = new ApuMmlPlayer({AudioUnits: [{Name: 'unit0', Devices: [2,3,4]}]});
+    var audioUnit = audio.audioUnits['unit0'];
     audio.sampleTime = 10.0;
     audio.sampleBits = 32;
-    var audioUnit = audio.audioUnits['unit0'];
 
     audioDevice.value = 0;
     audioVoice.value = 0;
     audioTempo.value = 120;
-    audioVolume.value = 5;
+    audioVolume.value = 15;
     audioOctave.value = 4;
     audioLength.value = 4;
-    currentVolume.value = 5;
+    currentVolume.value = 15;
     currentOctave.value = 4;
     currentLength.value = 4;
 
-	// TODO : Create OnCycleSound
-	var deviceNotes = [];
-	
-	// TODO : Auto Move octave
+    var isKeyMute = false;
+    keyMuteCheckbox.addEventListener('change', (event) => {
+        isKeyMute = keyMuteCheckbox.checked;
+        if (isKeyMute) {
+            noteOffDevice();
+        }
+        event.target.blur();
+    });
+    keyMuteCheckbox.checked = true;
+
+    var noteSources = [];
+    function noteOnDevice(noteNo, volume) {
+        noteOffDevice();
+        audio.reset();
+
+        let audioCtx = new AudioContext();
+        audioCtx.sampleRate = 44100;
+
+        let index = parseInt(audioDevice.value);
+        if (index < 0) {
+            index = 0;
+        }
+
+        let trackNo = index + 2;
+        let voice = parseInt(audioVoice.value);
+        let trackParams = {};
+        trackParams[trackNo] = {'Voice': voice, 'Volume': volume, 'NoteNo': noteNo};
+
+        let data = audio.oneCycleSound(audioCtx, {'unit0' : trackParams});
+        let noteSource = audioCtx.createBufferSource();
+        noteSource.buffer = data;
+        noteSource.connect(audioCtx.destination);
+        noteSource.onended = function() {
+            //console.log('Note ended.');
+        };
+
+        //console.log('Note On.');
+        noteSource.loop = true;
+        noteSource.start();
+        noteSources.push(noteSource);
+    }
+
+    function noteOffDevice() {
+        let noteSource;
+
+        while ((noteSource = noteSources.shift()) !== undefined) {
+            //console.log('Note off.');
+            noteSource.stop();
+        }
+    }
+
+    // TODO : Auto Move octave
 
     const DirectionNone = 'none';
     const DirectionForward ='forward';
@@ -289,6 +344,7 @@ window.onload = function(event) {
 
     function deleteSelectionValue() {
         let contentSelection = trackContentSelection.innerText;
+
         if (contentSelection.length > 0) {
             trackContentSelection.innerText = '';
             replay = null;
@@ -299,15 +355,20 @@ window.onload = function(event) {
                 replay = null;
             }
         }
+
+        keyDownEvent = null;
     }
 
     function backspaceSelectionValue() {
         let contentTop = trackContentTop.innerText;
         let previous = contentTop.length - 1;
+
         if (previous >= 0) {
             trackContentTop.innerText = contentTop.substring(0, previous);
             replay = null;
         }
+
+        keyDownEvent = null;
     }
 
     var replay = null;
@@ -319,17 +380,18 @@ window.onload = function(event) {
         audioCtx.sampleRate = 44100;
 
         if (replay === null) {
+            audio.reset();
+
             let index = parseInt(audioDevice.value);
             if (index < 0) {
                 index = 0;
-            } else {
-                let deviceNo = audioUnit.trackNumbers[index];
-                let dev = audioUnit.apu.devices[deviceNo];
-                dev.setVoice(parseInt(audioVoice.value));
             }
+            let trackNo = index + 2;
+            let dev = audioUnit.apu.devices[trackNo];
+            let voice = parseInt(audioVoice.value);
+            dev.setVoice(voice);
 
             let tempo = parseInt(audioTempo.value);
-            let trackNo = index + 1;
             let volume = parseInt(audioVolume.value);
             let octave = parseInt(audioOctave.value);
             let length = parseInt(audioLength.value);
@@ -338,7 +400,6 @@ window.onload = function(event) {
             console.log(mml);
 
             let container = MmlContainer.parse(mml);
-            audio.reset();
             audio.volumeScale = parseFloat(audioVolume.value);
             audio.loopCount = parseInt(masterLoop.value);
             replay = audio.play(audioCtx, container);
@@ -484,6 +545,11 @@ window.onload = function(event) {
                 }
                 octave = nextOctave;
                 replay = null;
+
+                if (!isKeyMute) {
+                    let noteNo = AudioConst.getNoteNo(octave, kv.value);
+                    noteOnDevice(noteNo, volume);
+                }
             }
 
         } else {
@@ -524,6 +590,7 @@ window.onload = function(event) {
         if (elem !== null) {
             elem.classList.remove('key-down');
         }
+        noteOffDevice();
         keyDownEvent = null;
     }
 
@@ -558,43 +625,22 @@ window.onload = function(event) {
             let dev = audioUnit.apu.devices[deviceNo];
             setSelectValue(audioVoice, (deviceNo <= 2) ? dev.getVoice() : -1);
         }
+        event.target.blur();
         replay = null;
     });
 
-    audioVoice.addEventListener('change', (event) => {
-        console.log(event);
+    function resetReplay(event) {
         replay = null;
-    });
+        event.target.blur();
+    }
 
-    audioVolume.addEventListener('change', (event) => {
-        console.log(event);
-        replay = null;
-    });
-
-    audioOctave.addEventListener('change', (event) => {
-        console.log(event);
-        replay = null;
-    });
-
-    audioLength.addEventListener('change', (event) => {
-        console.log(event);
-        replay = null;
-    });
-
-    currentVolume.addEventListener('change', (event) => {
-        console.log(event);
-        replay = null;
-    });
-
-    currentOctave.addEventListener('change', (event) => {
-        console.log(event);
-        replay = null;
-    });
-
-    currentLength.addEventListener('change', (event) => {
-        console.log(event);
-        replay = null;
-    });
+    audioVoice.addEventListener('change', resetReplay);
+    audioVolume.addEventListener('change', resetReplay);
+    audioOctave.addEventListener('change', resetReplay);
+    audioLength.addEventListener('change', resetReplay);
+    currentVolume.addEventListener('change', resetReplay);
+    currentOctave.addEventListener('change', resetReplay);
+    currentLength.addEventListener('change', resetReplay);
 
     trackTinyEditor.addEventListener('click', openTextEditor);
     trackTextEditor.addEventListener('blur', closeTextEditor);
@@ -606,6 +652,7 @@ window.onload = function(event) {
         let btn = document.querySelector('#' + id);
         btn.addEventListener('mousedown', keyDownButton);
         btn.addEventListener('mouseup', keyUpButton);
+        btn.onclick = function () {return false;}
     }
 
     upButton.addEventListener('click', () => {
