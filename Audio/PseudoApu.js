@@ -38,13 +38,12 @@ class PseudoApu
         this.noise = new NoiseDevice(sampleRate);
 
         // デバイスリスト
-        this.devices = [
-            null,
-            this.pulse1,
-            this.pulse2,
-            this.triangle,
-            this.noise,
-        ];
+        this.devices = {
+            '1': this.pulse1,
+            '2': this.pulse2,
+            '3': this.triangle,
+            '4': this.noise,
+        };
 
         // トラック順
         this.trackNumbers = trackNumbers;
