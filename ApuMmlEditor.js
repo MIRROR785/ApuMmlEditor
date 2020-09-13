@@ -236,10 +236,10 @@ window.onload = function(event) {
     audioDevice.value = 0;
     audioVoice.value = 0;
     audioTempo.value = 120;
-    audioVolume.value = 10;
+    audioVolume.value = 15;
     audioOctave.value = 4;
     audioLength.value = 4;
-    currentVolume.value = 10;
+    currentVolume.value = 15;
     currentOctave.value = 4;
     currentLength.value = 4;
     keyMuteCheckbox.checked = true;
@@ -268,7 +268,6 @@ window.onload = function(event) {
         let trackParams = {};
         trackParams[trackNo] = {'Voice': voice, 'Volume': volume, 'NoteNo': noteNo};
 
-        audio.volumeScale = 1.0;
         audio.volumeScale = parseFloat(masterVolume.value);
 
         let audioCtx = new AudioContext();
