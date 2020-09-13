@@ -1,7 +1,8 @@
 @charset "utf-8";
 body {margin:0; padding:0; font-size:1em;}
 button,input,select,textarea {font-family:inherit; font-size:100%;}
-textarea {max-height:100%;}
+button {user-select:none; touch-action: none;}
+textarea {max-height:100%; padding:0.25em;}
 fieldset {padding:0.25em; font-size:80%;}
 label {font-size:80%;}
 header {background-color:gray; color:white; padding-left:0.5em;}
@@ -11,20 +12,23 @@ section {margin:0.5em;}
 h1 {font-size:1.5em; margin:0;}
 h1>a {color:white;}
 h2 {background-color:lightgray; color:white; font-size:1.25em; margin:0; padding-left:1em;}
-h2>a {color:white;}
-.inline {display: inline-block;}
+h2:hover {background-color:lightsteelblue;}
 
+.active {background-color:steelblue; color:white;}
+.inline {display:inline-block;}
+
+#message {width:100%; margin:0; padding:0.5em 0; background-color:lightgray; color:white; text-align:center; font-family:monospace, serif; font-size:0.85em;}
 #mml-editor {width:98%; height:10em; font-family:monospace, serif; font-size:1em;}
-#audio-tempo {width: 3em;}
+#audio-tempo {width:3em;}
 
-#track-view {margin:0; padding:0;}
-#track-tiny-editor {margin:0.5em 0.5em 0.7em 0.5em; padding:0; width:98%; height:3em; font-family:monospace, serif; border:solid 1px black; overflow:auto;}
+#track-view {margin:0.5em 0; padding:0; height:4em;}
+#track-tiny-editor {margin:0; padding:0.25em; width:98%; height:3em; font-family:monospace, serif; border:solid 1px black; overflow:auto;}
 .track-content {font-family:monospace, serif; font-size:1em;}
 #track-content-selection {background-color:lightblue;}
 #track-content-caret {background-color:lightblue;}
-#track-text-editor {margin:0.5em 0.5em 0 0.5em; padding:0; width:98%; height:3em; font-family:monospace, serif; font-size:1em;}
+#track-text-editor {margin:0; width:98%; height:3em; font-family:monospace, serif; font-size:1em;}
 
-#keyboard-view {margin:0 0.5em 0.5em 0.5em;}
+#keyboard-view {margin:0.5em;}
 .keyboard {margin:0.25em;}
 .control {margin-top:0.25em; display:inline-block;}
 .key-assign {font-size:80%;}
@@ -38,3 +42,4 @@ h2>a {color:white;}
 #key-del {margin-left:0.5em;}
 #key-replay {margin-left:0.5em;}
 #key-clear {margin-left:0.5em; font-size:0.8em;}
+.play {background-color:red; color:white;}

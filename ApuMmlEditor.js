@@ -5,7 +5,54 @@
  * @license MIT
  */
 window.onload = function(event) {
+    // Menu
+    const menuMml = document.querySelector('#memu-mml');
+    const menuMiniKeyboard = document.querySelector('#memu-mini-keyboard');
+    const sectionMml = document.querySelector('#mml');
+    const sectionMiniKeyboard = document.querySelector('#mini-keyboard');
+
+    function setActive(menu, section, value) {
+        if (value) {
+            menu.classList.add('active');
+            section.hidden = false;
+            section.focus();
+        } else {
+            menu.classList.remove('active');
+            section.hidden = true;
+        }
+    }
+
+    menuMml.addEventListener('click', (event) => {
+        setActive(menuMml, sectionMml, true);
+        setActive(menuMiniKeyboard, sectionMiniKeyboard, false);
+    });
+    menuMiniKeyboard.addEventListener('click', (event) => {
+        setActive(menuMml, sectionMml, false);
+        setActive(menuMiniKeyboard, sectionMiniKeyboard, true);
+    });
+
+    setActive(menuMml, sectionMml, true);
+    setActive(menuMiniKeyboard, sectionMiniKeyboard, false);
+
+    // Common
     const AudioContext = window.AudioContext || window.webkitAudioContext;
+
+    const message = document.querySelector('#message');
+    message.hidden = true;
+    function wakeUpAudioContext(audioCtx) {
+        // check if context is in suspended state (autoplay policy)
+        if (audioCtx.state === 'suspended') {
+            var userGestureEvent = () => {
+                message.removeEventListener('click', userGestureEvent);
+                message.innerText = '';
+                message.hidden = true;
+                audioCtx.resume();
+            };
+            message.innerText = '自動再生ポリシーによってユーザ操作を必要としています。\nThe autoplay policy requires user interaction.\nこのメッセージをタッチすると音が再生されます。\nTouch this message for sound playback.';
+            message.hidden = false;
+            message.addEventListener('click', userGestureEvent);
+        }
+    }
 
     function setSelectValue(elem, value) {
         let options = elem.options;
@@ -32,10 +79,13 @@ window.onload = function(event) {
         elem.selectedIndex = index;
     }
 
+    function emptyAction(event) {
+        return false;
+    }
+
     // MML editor
     const mmlEditor = document.querySelector('#mml-editor');
     const playStartButton = document.querySelector('#play-start');
-    const playStopButton = document.querySelector('#play-stop');
     const mmlClearButton = document.querySelector('#mml-clear');
     const masterVolume = document.querySelector('#master-volume');
     const masterLoop = document.querySelector('#master-loop');
@@ -43,8 +93,9 @@ window.onload = function(event) {
     const track2Voice = document.querySelector('#track2-voice');
 
     var player = new ApuMmlPlayer();
-    player.sampleTime = 60.0;
+    player.sampleTime = 300;
     player.sampleBits = 32;
+    player.volumeScale = 2.0;
     player.setup();
     player.setDeviceParameter({
         unit0: {
@@ -64,7 +115,14 @@ window.onload = function(event) {
 
     var playerSource = null;
     function playStart() {
-        playStop();
+        if (playerSource !== null) {
+            playStop();
+            return;
+        }
+
+        playStartButton.classList.add('play');
+        let audioCtx = new AudioContext();
+        audioCtx.sampleRate = 44100;
 
         player.reset();
         player.volumeScale = parseFloat(masterVolume.value);
@@ -74,17 +132,17 @@ window.onload = function(event) {
 
         console.log('Parse MML text.');
         let container = MmlContainer.parse(mmlEditor.value);
-        let audioCtx = new AudioContext();
-        audioCtx.sampleRate = 44100;
         playerSource = audioCtx.createBufferSource();
         playerSource.buffer = player.play(audioCtx, container);
         playerSource.connect(audioCtx.destination);
         playerSource.onended = function() {
             console.log('Play ended.');
             playerSource = null;
+            playStartButton.classList.remove('play');
         };
         console.log('Play start.');
         playerSource.start();
+        wakeUpAudioContext(audioCtx);
     }
 
     function playStop() {
@@ -92,6 +150,7 @@ window.onload = function(event) {
             console.log('Play stop.');
             playerSource.stop();
             playerSource = null;
+            playStartButton.classList.remove('play');
         }
     }
 
@@ -99,8 +158,9 @@ window.onload = function(event) {
         mmlEditor.value = '';
     }
 
-    playStartButton.addEventListener('click', playStart);
-    playStopButton.addEventListener('click', playStop);
+    playStartButton.onpointerdown = playStart;
+    playStartButton.onclick = emptyAction;
+    playStartButton.oncontextmenu = emptyAction;
     mmlClearButton.addEventListener('click', mmlClear);
 
 
@@ -165,22 +225,26 @@ window.onload = function(event) {
     const keyMuteCheckbox = document.querySelector('#key-mute');
     const clearButton = document.querySelector('#key-clear');
 
+    const trackContentCaretTop = trackContentCaret.offsetTop;
+    const trackContentCaretPaddingTop = trackContentCaret.offsetTop - trackTinyEditor.offsetTop;
+
     var audio = new ApuMmlPlayer({AudioUnits: [{Name: 'unit0', Devices: [2,3,4]}]});
     var audioUnit = audio.audioUnits['unit0'];
-    audio.sampleTime = 10.0;
+    audio.sampleTime = 300;
     audio.sampleBits = 32;
 
     audioDevice.value = 0;
     audioVoice.value = 0;
     audioTempo.value = 120;
-    audioVolume.value = 15;
+    audioVolume.value = 10;
     audioOctave.value = 4;
     audioLength.value = 4;
-    currentVolume.value = 15;
+    currentVolume.value = 10;
     currentOctave.value = 4;
     currentLength.value = 4;
+    keyMuteCheckbox.checked = true;
 
-    var isKeyMute = false;
+    var isKeyMute = keyMuteCheckbox.checked;
     keyMuteCheckbox.addEventListener('change', (event) => {
         isKeyMute = keyMuteCheckbox.checked;
         if (isKeyMute) {
@@ -188,15 +252,11 @@ window.onload = function(event) {
         }
         event.target.blur();
     });
-    keyMuteCheckbox.checked = true;
 
     var noteSources = [];
     function noteOnDevice(noteNo, volume) {
         noteOffDevice();
         audio.reset();
-
-        let audioCtx = new AudioContext();
-        audioCtx.sampleRate = 44100;
 
         let index = parseInt(audioDevice.value);
         if (index < 0) {
@@ -208,6 +268,12 @@ window.onload = function(event) {
         let trackParams = {};
         trackParams[trackNo] = {'Voice': voice, 'Volume': volume, 'NoteNo': noteNo};
 
+        audio.volumeScale = 1.0;
+        audio.volumeScale = parseFloat(masterVolume.value);
+
+        let audioCtx = new AudioContext();
+        audioCtx.sampleRate = 44100;
+
         let data = audio.oneCycleSound(audioCtx, {'unit0' : trackParams});
         let noteSource = audioCtx.createBufferSource();
         noteSource.buffer = data;
@@ -218,8 +284,9 @@ window.onload = function(event) {
 
         //console.log('Note On.');
         noteSource.loop = true;
-        noteSource.start();
         noteSources.push(noteSource);
+        noteSource.start();
+        wakeUpAudioContext(audioCtx);
     }
 
     function noteOffDevice() {
@@ -231,12 +298,30 @@ window.onload = function(event) {
         }
     }
 
-    // TODO : Auto Move octave
-
     const DirectionNone = 'none';
     const DirectionForward ='forward';
     const DirectionBackword ='backword';
     var trackSelectionDirection = DirectionNone;
+
+    function upScrollTinyEditor() {
+        let ct = trackContentCaret.offsetTop - trackContentCaretTop;
+        if (ct < trackTinyEditor.scrollTop || ct > trackTinyEditor.scrollTop + trackTinyEditor.offsetHeight - trackContentCaret.offsetHeight) {
+            trackTinyEditor.scrollTop = ct;
+        }
+    }
+
+    function downScrollTinyEditor() {
+        let ct = trackContentCaret.offsetTop - trackContentCaretTop;
+        let dt = ct - trackTinyEditor.scrollTop;
+        if (dt < 0 || dt > trackTinyEditor.offsetHeight - trackContentCaret.offsetHeight) {
+            let at = Math.abs(dt);
+            if (at <= trackTinyEditor.offsetHeight) {
+                trackTinyEditor.scrollTop = trackContentCaret.offsetHeight * dt / at;
+            } else {
+                trackTinyEditor.scrollTop = ct;
+            }
+        }
+    }
 
     function openTextEditor() {
         trackTextEditor.hidden = false;
@@ -266,8 +351,10 @@ window.onload = function(event) {
         trackContentSelection.innerText = contentSelection;
         trackContentBottom.innerText = contentBottom;
         trackSelectionDirection = trackTextEditor.selectionDirection;
+        upScrollTinyEditor();
 
         trackTextEditor.hidden = true;
+        replay = null;
     }
 
     function moveLeftCaret() {
@@ -289,7 +376,7 @@ window.onload = function(event) {
                 let ch = contentTop.substring(previous);
                 contentTop = contentTop.substring(0, previous);
 
-                if (keyDownEvent.shiftKey) {
+                if (keyDownEvent.shiftKey !== undefined && keyDownEvent.shiftKey) {
                     contentSelection = ch + contentSelection;
                     trackSelectionDirection = DirectionBackword;
 
@@ -303,6 +390,7 @@ window.onload = function(event) {
         trackContentTop.innerText = contentTop;
         trackContentSelection.innerText = contentSelection;
         trackContentBottom.innerText = contentBottom;
+        upScrollTinyEditor();
 
         keyDownEvent = null;
     }
@@ -324,7 +412,7 @@ window.onload = function(event) {
                 let ch = contentBottom.substring(0, 1);
                 contentBottom = contentBottom.substring(1);
 
-                if (keyDownEvent.shiftKey) {
+                if (keyDownEvent.shiftKey !== undefined && keyDownEvent.shiftKey) {
                     contentSelection = contentSelection + ch;
                     trackSelectionDirection = DirectionForward;
 
@@ -338,6 +426,7 @@ window.onload = function(event) {
         trackContentTop.innerText = contentTop;
         trackContentSelection.innerText = contentSelection;
         trackContentBottom.innerText = contentBottom;
+        downScrollTinyEditor();
 
         keyDownEvent = null;
     }
@@ -374,7 +463,11 @@ window.onload = function(event) {
     var replay = null;
     var replaySource = null;
     function replayStart() {
-        replayStop();
+
+        if (replaySource !== null) {
+            replayStop();
+            return;
+        }
 
         let audioCtx = new AudioContext();
         audioCtx.sampleRate = 44100;
@@ -400,7 +493,7 @@ window.onload = function(event) {
             console.log(mml);
 
             let container = MmlContainer.parse(mml);
-            audio.volumeScale = parseFloat(audioVolume.value);
+            audio.volumeScale = parseFloat(masterVolume.value);
             audio.loopCount = parseInt(masterLoop.value);
             replay = audio.play(audioCtx, container);
         }
@@ -411,10 +504,13 @@ window.onload = function(event) {
         replaySource.onended = function() {
             console.log('Replay ended.');
             replaySource = null;
+            replayButton.classList.remove('play');
         };
 
         console.log('Replay start.');
+        replayButton.classList.add('play');
         replaySource.start();
+        wakeUpAudioContext(audioCtx);
     }
 
     function replayStop() {
@@ -422,17 +518,17 @@ window.onload = function(event) {
             console.log('Replay stop.');
             replaySource.stop();
             replaySource = null;
+            replayButton.classList.remove('play');
         }
     }
 
-    var controlButtons = {
+    var clickButtons = {
         ArrowUp: upButton,
         ArrowDown: downButton,
         ArrowLeft: leftButton,
         ArrowRight: rightButton,
         Delete: delButton,
         Backspace: bsButton,
-        Enter: replayButton,
     };
 
     var keyButtons = {
@@ -467,7 +563,9 @@ window.onload = function(event) {
         a: octaveDownButton,
         l: octaveUpButton,
         '1': volumeDownButton,
-        '9': volumeUpButton
+        '9': volumeUpButton,
+
+        Enter: replayButton,
     };
 
     var keyValues = {
@@ -518,11 +616,17 @@ window.onload = function(event) {
         trackContentTop.innerText = '';
         trackContentSelection.innerText = '';
         trackContentBottom.innerText = '';
+        replay = null;
     }
 
     function keyDownButton(event) {
         let elem = event.currentTarget;
         let kv = keyValues[elem.id];
+
+        if (kv === undefined) {
+            return;
+        }
+
         elem.classList.add('key-down');
 
         let octave = parseInt(currentOctave.value);
@@ -545,9 +649,10 @@ window.onload = function(event) {
                 }
                 octave = nextOctave;
                 replay = null;
+                //console.log(octave);
 
                 if (!isKeyMute) {
-                    let noteNo = AudioConst.getNoteNo(octave, kv.value);
+                    let noteNo = AudioConst.getNoteNo(octave - 1, kv.value);
                     noteOnDevice(noteNo, volume);
                 }
             }
@@ -604,10 +709,9 @@ window.onload = function(event) {
                 let btn = keyButtons[keyDownEvent.key];
                 if (btn !== undefined) {
                     btn.focus();
-                    keyDownButton({currentTarget:btn});
-
+                    btn.onpointerdown({currentTarget:btn});
                 } else {
-                    btn = controlButtons[keyDownEvent.key];
+                    btn = clickButtons[keyDownEvent.key];
                     if (btn !== undefined) {
                         btn.focus();
                         btn.click();
@@ -625,8 +729,8 @@ window.onload = function(event) {
             let dev = audioUnit.apu.devices[deviceNo];
             setSelectValue(audioVoice, (deviceNo <= 2) ? dev.getVoice() : -1);
         }
-        event.target.blur();
         replay = null;
+        event.target.blur();
     });
 
     function resetReplay(event) {
@@ -650,26 +754,37 @@ window.onload = function(event) {
 
     for (var id in keyValues) {
         let btn = document.querySelector('#' + id);
-        btn.addEventListener('mousedown', keyDownButton);
-        btn.addEventListener('mouseup', keyUpButton);
-        btn.onclick = function () {return false;}
+        btn.onpointerdown = keyDownButton;
+        btn.onpointerup = keyUpButton;
+        btn.onclick = emptyAction;
+        btn.oncontextmenu = emptyAction;
     }
 
-    upButton.addEventListener('click', () => {
+    upButton.addEventListener('click', (event) => {
         countUpIndex(audioDevice);
         replay = null;
     });
-    downButton.addEventListener('click', () => {
+    downButton.addEventListener('click', (event) => {
         countDownIndex(audioDevice);
         replay = null;
     });
 
     leftButton.addEventListener('click', moveLeftCaret);
     rightButton.addEventListener('click', moveRightCaret);
+
     delButton.addEventListener('click', deleteSelectionValue);
     bsButton.addEventListener('click', backspaceSelectionValue);
-    replayButton.addEventListener('click', replayStart);
     clearButton.addEventListener('click', clearTrack);
+
+    replayButton.onpointerdown = replayStart;
+    replayButton.onpointerup = keyUpButton;
+    replayButton.onclick = emptyAction;
+    replayButton.oncontextmenu = emptyAction;
+
+    let controls = document.querySelectorAll('button.key-ctrl');
+    for (var btn of controls) {
+        btn.oncontextmenu = emptyAction;
+    }
 
     clearTrack();
 }
