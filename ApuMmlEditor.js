@@ -42,14 +42,16 @@ window.onload = function(event) {
     function wakeUpAudioContext(audioCtx) {
         // check if context is in suspended state (autoplay policy)
         if (audioCtx.state === 'suspended') {
-            var userGestureEvent = () => {
+            var userGestureEvent = (event) => {
                 message.removeEventListener('click', userGestureEvent);
                 message.innerText = '';
                 message.hidden = true;
+                message.classList.remove('warnning');
                 audioCtx.resume();
             };
             message.innerText = '自動再生ポリシーによってユーザ操作を必要としています。\nThe autoplay policy requires user interaction.\nこのメッセージをタッチすると音が再生されます。\nTouch this message for sound playback.';
             message.hidden = false;
+            message.classList.add('warnning');
             message.addEventListener('click', userGestureEvent);
         }
     }
@@ -135,7 +137,7 @@ window.onload = function(event) {
         playerSource = audioCtx.createBufferSource();
         playerSource.buffer = player.play(audioCtx, container);
         playerSource.connect(audioCtx.destination);
-        playerSource.onended = function() {
+        playerSource.onended = (event) => {
             console.log('Play ended.');
             playerSource = null;
             playStartButton.classList.remove('play');
@@ -277,7 +279,7 @@ window.onload = function(event) {
         let noteSource = audioCtx.createBufferSource();
         noteSource.buffer = data;
         noteSource.connect(audioCtx.destination);
-        noteSource.onended = function() {
+        noteSource.onended = (event) => {
             //console.log('Note ended.');
         };
 
@@ -500,7 +502,7 @@ window.onload = function(event) {
         replaySource = audioCtx.createBufferSource();
         replaySource.buffer = replay;
         replaySource.connect(audioCtx.destination);
-        replaySource.onended = function() {
+        replaySource.onended = (event) => {
             console.log('Replay ended.');
             replaySource = null;
             replayButton.classList.remove('play');

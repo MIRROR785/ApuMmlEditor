@@ -14,10 +14,6 @@ h1>a {color:white;}
 h2 {background-color:lightgray; color:white; font-size:1.25em; margin:0; padding-left:1em;}
 h2:hover {background-color:lightsteelblue;}
 
-.active {background-color:steelblue; color:white;}
-.inline {display:inline-block;}
-
-#message {width:100%; margin:0; padding:0.5em 0; background-color:mistyrose; color:black; text-align:center; font-family:monospace, serif; font-size:0.78em;}
 #mml-editor {width:98%; height:10em; font-family:monospace, serif; font-size:1em;}
 #audio-tempo {width:3em;}
 
@@ -42,4 +38,8 @@ h2:hover {background-color:lightsteelblue;}
 #key-del {margin-left:0.5em;}
 #key-replay {margin-left:0.5em;}
 #key-clear {margin-left:0.5em; font-size:0.8em;}
+
+.active {background-color:steelblue; color:white;}
+.inline {display:inline-block;}
+.warnning {display:block; width:100%; margin:0; padding:0.5em 0; background-color:mistyrose; color:black; text-align:center; font-family:monospace, serif; font-size:0.78em;}
 .play {background-color:red; color:white;}
