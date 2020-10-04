@@ -37,22 +37,33 @@ window.onload = function(event) {
     // Common
     const AudioContext = window.AudioContext || window.webkitAudioContext;
 
+    const progress = document.querySelector('#progress');
+    progress.hidden = true;
+
+    const iconNoteOn = document.querySelector('#icon-note-on');
+    iconNoteOn.hidden = true;
+
+    const messageBox = document.querySelector('#message-box');
     const message = document.querySelector('#message');
-    message.hidden = true;
+    messageBox.hidden = true;
     function wakeUpAudioContext(audioCtx) {
         // check if context is in suspended state (autoplay policy)
         if (audioCtx.state === 'suspended') {
             var userGestureEvent = (event) => {
-                message.removeEventListener('click', userGestureEvent);
+                messageBox.removeEventListener('click', userGestureEvent);
+                messageBox.hidden = true;
+                messageBox.classList.remove('warnning');
                 message.innerText = '';
-                message.hidden = true;
-                message.classList.remove('warnning');
                 audioCtx.resume();
+                iconNoteOn.hidden = true;
             };
             message.innerText = '自動再生ポリシーによってユーザ操作を必要としています。\nThe autoplay policy requires user interaction.\nこのメッセージをタッチすると音が再生されます。\nTouch this message for sound playback.';
-            message.hidden = false;
-            message.classList.add('warnning');
-            message.addEventListener('click', userGestureEvent);
+            messageBox.hidden = false;
+            messageBox.classList.add('warnning');
+            messageBox.addEventListener('click', userGestureEvent);
+            iconNoteOn.hidden = false;
+        } else {
+            iconNoteOn.hidden = true;
         }
     }
 
@@ -117,12 +128,6 @@ window.onload = function(event) {
 
     var playerSource = null;
     function playStart() {
-        if (playerSource !== null) {
-            playStop();
-            return;
-        }
-
-        playStartButton.classList.add('play');
         let audioCtx = new AudioContext();
         audioCtx.sampleRate = 44100;
 
@@ -160,7 +165,15 @@ window.onload = function(event) {
         mmlEditor.value = '';
     }
 
-    playStartButton.onpointerdown = playStart;
+    playStartButton.onpointerdown = async (event) => {
+        if (playerSource !== null) {
+            playStop();
+            return null;
+        } else {
+            playStartButton.classList.add('play');
+            return new Promise((resolve) => setTimeout(() => {playStart()}, 0));
+        }
+    };
     playStartButton.onclick = emptyAction;
     playStartButton.oncontextmenu = emptyAction;
     mmlClearButton.addEventListener('click', mmlClear);
@@ -464,12 +477,6 @@ window.onload = function(event) {
     var replay = null;
     var replaySource = null;
     function replayStart() {
-
-        if (replaySource !== null) {
-            replayStop();
-            return;
-        }
-
         let audioCtx = new AudioContext();
         audioCtx.sampleRate = 44100;
 
@@ -509,7 +516,6 @@ window.onload = function(event) {
         };
 
         console.log('Replay start.');
-        replayButton.classList.add('play');
         replaySource.start();
         wakeUpAudioContext(audioCtx);
     }
@@ -777,7 +783,15 @@ window.onload = function(event) {
     bsButton.addEventListener('click', backspaceSelectionValue);
     clearButton.addEventListener('click', clearTrack);
 
-    replayButton.onpointerdown = replayStart;
+    replayButton.onpointerdown = async(event) => {
+        if (replaySource !== null) {
+            replayStop();
+            return null;
+        } else {
+            replayButton.classList.add('play');
+            return new Promise((resolve) => setTimeout(() => {replayStart()}, 0));
+        }
+    }
     replayButton.onpointerup = keyUpButton;
     replayButton.onclick = emptyAction;
     replayButton.oncontextmenu = emptyAction;

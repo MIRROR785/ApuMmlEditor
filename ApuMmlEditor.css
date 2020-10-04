@@ -39,7 +39,14 @@ h2:hover {background-color:lightsteelblue;}
 #key-replay {margin-left:0.5em;}
 #key-clear {margin-left:0.5em; font-size:0.8em;}
 
+#message {display:inline-block;}
 .active {background-color:steelblue; color:white;}
 .inline {display:inline-block;}
-.warnning {display:block; width:100%; margin:0; padding:0.5em 0; background-color:mistyrose; color:black; text-align:center; font-family:monospace, serif; font-size:0.78em;}
+.warnning {display:block; width:100%; margin:0; padding:0.5em 0; background-color:mistyrose; color:black; font-family:monospace, serif; font-size:0.78em;}
 .play {background-color:red; color:white;}
+
+#progress {margin:0; padding:0;}
+#vortex {position:absolute; left:50%; top:50%; width:4em; height:4em; margin-left:-2em; margin-top:-2em;}
+
+#icon-note-on {margin:0; padding:0; display:inline-block;}
+#note-on {width:4em; height:4em;}
