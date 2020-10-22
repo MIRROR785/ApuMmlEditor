@@ -26,6 +26,15 @@
 </header>
 <h2 id='memu-mml'>MML</h2>
 <section id='mml'>
+<div id='mml-menu'>
+	<button class='menu-button' id='menu-open'>Open</button>
+	<button class='menu-button' id='menu-save'>Save</button>
+	&nbsp;
+	<button class='menu-button' id='menu-phrase'>Phrase</button>
+	&nbsp;
+	<button class='menu-button' id='menu-import'>Import</button>
+	<button class='menu-button' id='menu-export'>Export</button>
+</div>
 <textarea id='mml-editor' class='editor' spellcheck='false'>
 #Title ICE BALLER - Penguin
 #Composer Alma
@@ -35,14 +44,14 @@ TR1 l8 Lo6rgggggab>c<afarab>cd<gr>frfede<g>cerrrrr<gggggab>c<a>cfrfffggggggggfff
 TR2 l8 Lo4cc<g>ccc<g>cffcfffcfgbb>ddd<bgcc<g>ccc<g>ccc<g>ccc<g>cffffg+g+g+g+ggb>d<ggb>d<ccefffed
 TR3 l8 Lo6reeeeefgafcfrfgabdr>drdc<b>c<da>crrrrr<eeeeefgafa>crcccdededef<b>c<gb>ccc<ba
 </textarea>
-<div>
-<button id='play-start'>Play</button>
-<button id='mml-clear'>Clear</button>
+<div id='mml-player'>
+	<button id='play-start'>Play</button>
+	<button id='mml-clear'>Clear</button>
 </div>
-<article id='config-view'>
-<fieldset class='inline'>
+<article id='player-view'>
+<fieldset class='attribute-set'>
 	<legend>Master</legend>
-	<span class='inline'>
+	<span class='attribute'>
 		<label for='master-volume'>Volume</label>
 		<select id='master-volume' name='master-volume'>
 			<option value='0'>--</option>
@@ -58,7 +67,7 @@ TR3 l8 Lo6reeeeefgafcfrfgabdr>drdc<b>c<da>crrrrr<eeeeefgafa>crcccdededef<b>c<gb>
 			<option value='2.0'>10</option>
 		</select>
 	</span>
-	<span class='inline'>
+	<span class='attribute'>
 		<label for='master-loop'>Loop</label>
 		<select id='master-loop' name='master-loop'>
 			<option value='0'>--</option>
@@ -67,8 +76,8 @@ TR3 l8 Lo6reeeeefgafcfrfgabdr>drdc<b>c<da>crrrrr<eeeeefgafa>crcccdededef<b>c<gb>
 		</select>
 	</span>
 </fieldset>
-<span class='inline'>
-<fieldset class='inline'>
+<span class='attribute-set'>
+<fieldset class='attribute-set'>
 	<legend>Track1</legend>
 	<label for='track1-voice'>Voice</label>
 	<select id='track1-voice' name='track1-voice'>
@@ -79,7 +88,7 @@ TR3 l8 Lo6reeeeefgafcfrfgabdr>drdc<b>c<da>crrrrr<eeeeefgafa>crcccdededef<b>c<gb>
 		<option value='3'>3:&nbsp;Duty75%</option>
 	</select>
 </fieldset>
-<fieldset class='inline'>
+<fieldset class='attribute-set'>
 	<legend>Track2</legend>
 	<label for='track2-voice'>Voice</label>
 	<select id='track2-voice' name='track2-voice'>
@@ -95,9 +104,9 @@ TR3 l8 Lo6reeeeefgafcfrfgabdr>drdc<b>c<da>crrrrr<eeeeefgafa>crcccdededef<b>c<gb>
 </section>
 <h2 id='memu-mini-keyboard'>Mini keyboard</h2>
 <section id='mini-keyboard'>
-<fieldset class='inline'>
+<fieldset class='attribute-set'>
 	<legend>Audio</legend>
-	<span class='inline'>
+	<span class='attribute'>
 		<label for='audio-device'>Device</label>
 		<select id='audio-device' name='audio-device'>
 			<option value='-1'>-----</option>
@@ -106,7 +115,7 @@ TR3 l8 Lo6reeeeefgafcfrfgabdr>drdc<b>c<da>crrrrr<eeeeefgafa>crcccdededef<b>c<gb>
 			<option value='2'>Noise</option>
 		</select>
 	</span>
-	<span class='inline'>
+	<span class='attribute'>
 		<label for='audio-voice'>Voice</label>
 		<select id='audio-voice' name='audio-voice'>
 			<option value='-1'>-----</option>
@@ -116,11 +125,11 @@ TR3 l8 Lo6reeeeefgafcfrfgabdr>drdc<b>c<da>crrrrr<eeeeefgafa>crcccdededef<b>c<gb>
 			<option value='3'>3:&nbsp;Duty75%</option>
 		</select>
 	</span>
-	<span class='inline'>
+	<span class='attribute'>
 		<label for='audio-tempo'>Tempo</label>
 		<input id='audio-tempo' type='number' min='1' max='360'/>
 	</span>
-	<span class='inline'>
+	<span class='attribute'>
 		<label for='audio-volume'>Volume</label>
 		<select id='audio-volume' name='audio-volume'>
 			<option value='0'>--</option>
@@ -141,7 +150,7 @@ TR3 l8 Lo6reeeeefgafcfrfgabdr>drdc<b>c<da>crrrrr<eeeeefgafa>crcccdededef<b>c<gb>
 			<option>15</option>
 		</select>
 	</span>
-	<span class='inline'>
+	<span class='attribute'>
 		<label for='audio-octave'>Octave</label>
 		<select id='audio-octave' name='audio-octave'>
 			<option value='0'>--</option>
@@ -156,7 +165,7 @@ TR3 l8 Lo6reeeeefgafcfrfgabdr>drdc<b>c<da>crrrrr<eeeeefgafa>crcccdededef<b>c<gb>
 			<option>9</option>
 		</select>
 	</span>
-	<span class='inline'>
+	<span class='attribute'>
 		<label for='audio-length'>Length</label>
 		<select id='audio-length' name='audio-length'>
 			<option value='0'>--</option>
@@ -169,9 +178,9 @@ TR3 l8 Lo6reeeeefgafcfrfgabdr>drdc<b>c<da>crrrrr<eeeeefgafa>crcccdededef<b>c<gb>
 		</select>
 	</span>
 </fieldset>
-<fieldset class='inline'>
+<fieldset class='attribute-set'>
 	<legend>Current</legend>
-	<span class='inline'>
+	<span class='attribute'>
 		<label for='current-volume'>Volume</label>
 		<select id='current-volume' name='current-volume'>
 			<option value='0'>--</option>
@@ -192,7 +201,7 @@ TR3 l8 Lo6reeeeefgafcfrfgabdr>drdc<b>c<da>crrrrr<eeeeefgafa>crcccdededef<b>c<gb>
 			<option>15</option>
 		</select>
 	</span>
-	<span class='inline'>
+	<span class='attribute'>
 		<label for='current-octave'>Octave</label>
 		<select id='current-octave' name='current-octave'>
 			<option value='0'>--</option>
@@ -207,7 +216,7 @@ TR3 l8 Lo6reeeeefgafcfrfgabdr>drdc<b>c<da>crrrrr<eeeeefgafa>crcccdededef<b>c<gb>
 			<option>9</option>
 		</select>
 	</span>
-	<span class='inline'>
+	<span class='attribute'>
 		<label for='current-length'>Length</label>
 		<select id='current-length' name='current-length'>
 			<option value='0'>--</option>
@@ -219,10 +228,16 @@ TR3 l8 Lo6reeeeefgafcfrfgabdr>drdc<b>c<da>crrrrr<eeeeefgafa>crcccdededef<b>c<gb>
 			<option>32</option>
 		</select>
 	</span>
-	<input type='checkbox' id='key-mute'><label for='key-mute'>Mute</label>
+	<span class='attribute'>
+		<input type='checkbox' id='key-mute'><label for='key-mute'>Mute</label>
+	</span>
 	<button class='key-ctrl' id='key-clear'>Clear</button>
 </fieldset>
-
+<div id='track-menu'>
+	<button class='menu-button' id='menu-stack'>F1:Stack</button>
+	<button class='menu-button' id='menu-popup'>F2:PopUp</button>
+	<button class='menu-button' id='menu-list'>F3:List</button>
+</div>
 <div id='track-view'>
 	<div id='track-tiny-editor'>
 		<span id='track-content-top' class='track-content'></span><span id='track-content-caret' class='track-content'>&nbsp;</span><span id='track-content-selection' class='track-content'></span><span id='track-content-bottom' class='track-content'></span>
@@ -302,9 +317,10 @@ TR3 l8 Lo6reeeeefgafcfrfgabdr>drdc<b>c<da>crrrrr<eeeeefgafa>crcccdededef<b>c<gb>
 </g>
 </svg>
 </section>
-<section id='message-box'>
-<div id='icon-note-on'>
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="note-on" viewBox="0 0 100 100">
+<section id='dialog-view'>
+<div id='dialog-box'>
+<div id='dialog-icon'>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="icon-note-on" viewBox="0 0 100 100" class="dialog-item-icon">
 <defs>
   <filter id="filter-drop-shadow" style="color-interpolation-filters:sRGB;">
     <feGaussianBlur stdDeviation="2 2" result="blur" />
@@ -370,10 +386,11 @@ TR3 l8 Lo6reeeeefgafcfrfgabdr>drdc<b>c<da>crrrrr<eeeeefgafa>crcccdededef<b>c<gb>
 </g>
 </svg>
 </div>
-<div id='message'></div>
+<div id='dialog-context'></div>
+</div>
 </section>
 <footer>
-Copyright &copy; 2020 @MIRROR_
+Copyright&nbsp;2020&nbsp;@MIRROR_
 </footer>
 </body>
 </html>
