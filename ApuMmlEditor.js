@@ -7,11 +7,12 @@
 
 class MmlAttribute
 {
-    constructor(name = null, title = null, composer = null, arranger = null, tracks = null) {
+    constructor(name = null, title = null, composer = null, arranger = null, master = null, tracks = null) {
         this.name = name;
         this.title = title;
         this.composer = composer;
         this.arranger = arranger;
+        this.master = master;
         this.tracks = tracks;
         this.createDate = null;
         this.updateDate = null;
@@ -344,6 +345,7 @@ window.onload = function(event) {
 'TR1 l8 Lo7rgggggab>c<afarab>cd<gr>frfede<g>cerrrrr<gggggab>c<a>cfrfffggggggggfffeerrr\n' +
 'TR2 l8 Lo5cc<g>ccc<g>cffcfffcfgbb>ddd<bgcc<g>ccc<g>ccc<g>ccc<g>cffffg+g+g+g+ggb>d<ggb>d<ccefffed\n' +
 'TR3 l8 Lo6reeeeefgafcfrfgabdr>drdc<b>c<da>crrrrr<eeeeefgafa>crcccdededef<b>c<gb>ccc<ba'
+, master: {volume:'2.0', loop:'0'}
 , tracks: ['2','2']
 , createDate: new Date(2014,10,30, 22,28,05) // 2014-11-30 22:28:05
 , updateDate: new Date(2020,09,24, 10,53,01) // 2020-10-24 10:53:01
@@ -356,6 +358,7 @@ window.onload = function(event) {
 'TR1 l8 L o7d2.dddrr4r2r<f+gabagf+ra>dc+4<barba+b>c+<agedef+gba4.rr>dr4rdr4rc+r4rc+r4r<br4bgf+dc+c+dedrr4r1r1r1r2r4rf+ba+ba+b>c+de<gf+gab>cc+<a\n' +
 'TR2 l8 L o6r1e4re4gf+ef+2&f+agf+f+2rf+dgb2&b4f+4f+4aggf+f+erf+garf+ga>dc+c+4&c+<bf+gb2a2g4ggf+2r1r2r4f+4gb>cedc+4<bf+f+edc+4e4f+4a4b4>de<e4g4b>cc+<a\n' +
 'TR3 l8 L o5dr<ar>drd<a>dr<ar>drd<a>dr<ar>drd<a>dr<ar>drdc+<brbrf+gf+dc+eaggf+f+edrardradc+rf+rc+rf+c+<br>f+r<b>gf+dc+edc+dra+4ba+b4.a+>c+4def+4.f+d4gg4ggg4gf+gagf+edc+<brgregf+ef+4e4d4c+4'
+, master: {volume:'2.0', loop:'1'}
 , tracks: ['2','2']
 , createDate: new Date(2014,10,30, 22,28,05) // 2014-11-30 22:28:05
 , updateDate: new Date(2020,09,24, 10,47,33) // 2020-10-24 10:47:33
@@ -367,6 +370,7 @@ window.onload = function(event) {
 'TR0 t180\n' +
 'TR1 l1 o4g4.g8>c4.c8d8g8g2^8c8d8f8e8d8c4.<b8>c\n' +
 'TR2 l1 o3rg4.g8>c4.c8d8a8g8f8e4.d8e'
+, master: {volume:'2.0', loop:'0'}
 , tracks: ['0','1']
 , createDate: new Date(2014,10,30, 22,28,05) // 2014-11-30 22:28:05
 , updateDate: new Date(2020,09,23, 22,22,51) // 2020-10-23 22:22:51
@@ -375,6 +379,7 @@ window.onload = function(event) {
             for (const sample of samples) {
                 const attr = getMmlAttribute(sample.mml);
                 attr.name = attr.title;
+                attr.master = sample.master;
                 attr.tracks = sample.tracks;
                 attr.createDate = sample.createDate;
                 attr.updateDate = sample.updateDate;
@@ -384,12 +389,14 @@ window.onload = function(event) {
             writeMusics(musics);
 
         } else {
+            const defaultMaster = {volume:'2.0', loop:'0'};
             for (const item of list) {
                 const attr = new MmlAttribute(
                     item.name,
                     item.title,
                     item.composer,
                     item.arranger,
+                    (item.master) ? item.master : defaultMaster,
                     item.tracks);
                 if (item.createDate !== null) attr.createDate = new Date(item.createDate);
                 if (item.updateDate !== null) attr.updateDate = new Date(item.updateDate);
@@ -548,7 +555,7 @@ window.onload = function(event) {
         const list = [];
         for (const attr of musics) {
             const remarks = getRemarks(attr);
-            list.push({id:attr.name, name:attr.title, remarks:remarks});
+            list.push({id:attr.name, name:(attr.name) ? attr.name: attr.title, remarks:remarks});
         }
         showOpenDialog(
             'Open',
@@ -557,6 +564,8 @@ window.onload = function(event) {
                 mmlEditor.value = readMusicData(id);
                 const index = findMuiscIndex(musics, id);
                 const music = musics[index];
+                masterVolume.value = music.master.volume;
+                masterLoop.value = music.master.loop;
                 track1Voice.value = music.tracks[0];
                 track2Voice.value = music.tracks[1];
             },
@@ -573,6 +582,7 @@ window.onload = function(event) {
             const musics = readMusics();
             const attr = getMmlAttribute(mml);
             const name = (attr.title !== null) ? attr.title : 'music-' + new Date().toDateStamp();
+            attr.master = {volume:masterVolume.value, loop:masterLoop.value};
             attr.tracks = [track1Voice.value, track2Voice.value];
 
             const checkBox= document.createElement('input');
