@@ -335,41 +335,51 @@ window.onload = function(event) {
         const list = getLocalStorage('musics');
 
         if (list === null || list.length <= 0) {
-            const tracks = ['2', '2'];
-            const createDate = new Date(2014,10,30, 22,28,05);
-
-            const samples = [
+            const samples =
+[{mml:
 '#Title ICE BALLER - Penguin\n' +
 '#Composer Alma\n' +
 '#Arranger @MIRROR_\n' +
 'TR0 t120\n' +
-'TR1 l8 Lo6rgggggab>c<afarab>cd<gr>frfede<g>cerrrrr<gggggab>c<a>cfrfffggggggggfffeerrr\n' +
-'TR2 l8 Lo4cc<g>ccc<g>cffcfffcfgbb>ddd<bgcc<g>ccc<g>ccc<g>ccc<g>cffffg+g+g+g+ggb>d<ggb>d<ccefffed\n' +
-'TR3 l8 Lo6reeeeefgafcfrfgabdr>drdc<b>c<da>crrrrr<eeeeefgafa>crcccdededef<b>c<gb>ccc<ba',
-
+'TR1 l8 Lo7rgggggab>c<afarab>cd<gr>frfede<g>cerrrrr<gggggab>c<a>cfrfffggggggggfffeerrr\n' +
+'TR2 l8 Lo5cc<g>ccc<g>cffcfffcfgbb>ddd<bgcc<g>ccc<g>ccc<g>ccc<g>cffffg+g+g+g+ggb>d<ggb>d<ccefffed\n' +
+'TR3 l8 Lo6reeeeefgafcfrfgabdr>drdc<b>c<da>crrrrr<eeeeefgafa>crcccdededef<b>c<gb>ccc<ba'
+, tracks: ['2','2']
+, createDate: new Date(2014,10,30, 22,28,05) // 2014-11-30 22:28:05
+, updateDate: new Date(2020,09,24, 10,53,01) // 2020-10-24 10:53:01
+}
+,{mml:
 '#Title ICE BALLER - Opening\n' +
 '#Composer Sakura\n' +
 '#Arranger @MIRROR_\n' +
 'TR0 t120\n' +
-'TR1 l8 L o6d2.dddrr4r2r<f+gabagf+ra>dc+4<barba+b>c+<agedef+gba4.rr>dr4rdr4rc+r4rc+r4r<br4bgf+dc+c+dedrr4r1r1r1r2r4rf+ba+ba+b>c+de<gf+gab>cc+<a\n' +
-'TR2 l8 L o5r1e4re4gf+ef+2&f+agf+f+2rf+dgb2&b4f+4f+4aggf+f+erf+garf+ga>dc+c+4&c+<bf+gb2a2g4ggf+2r1r2r4f+4gb>cedc+4<bf+f+edc+4e4f+4a4b4>de<e4g4b>cc+<a\n' +
-'TR3 l8 L o4dr<ar>drd<a>dr<ar>drd<a>dr<ar>drd<a>dr<ar>drdc+<brbrf+gf+dc+eaggf+f+edrardradc+rf+rc+rf+c+<br>f+r<b>gf+dc+edc+dra+4ba+b4.a+>c+4def+4.f+d4gg4ggg4gf+gagf+edc+<brgregf+ef+4e4d4c+4',
-
+'TR1 l8 L o7d2.dddrr4r2r<f+gabagf+ra>dc+4<barba+b>c+<agedef+gba4.rr>dr4rdr4rc+r4rc+r4r<br4bgf+dc+c+dedrr4r1r1r1r2r4rf+ba+ba+b>c+de<gf+gab>cc+<a\n' +
+'TR2 l8 L o6r1e4re4gf+ef+2&f+agf+f+2rf+dgb2&b4f+4f+4aggf+f+erf+garf+ga>dc+c+4&c+<bf+gb2a2g4ggf+2r1r2r4f+4gb>cedc+4<bf+f+edc+4e4f+4a4b4>de<e4g4b>cc+<a\n' +
+'TR3 l8 L o5dr<ar>drd<a>dr<ar>drd<a>dr<ar>drd<a>dr<ar>drdc+<brbrf+gf+dc+eaggf+f+edrardradc+rf+rc+rf+c+<br>f+r<b>gf+dc+edc+dra+4ba+b4.a+>c+4def+4.f+d4gg4ggg4gf+gagf+edc+<brgregf+ef+4e4d4c+4'
+, tracks: ['2','2']
+, createDate: new Date(2014,10,30, 22,28,05) // 2014-11-30 22:28:05
+, updateDate: new Date(2020,09,24, 10,47,33) // 2020-10-24 10:47:33
+}
+,{mml:
 '#Title ICE BALLER - Clear!\n' +
 '#Composer Momo\n' +
 '#Arranger @MIRROR_\n' +
 'TR0 t180\n' +
 'TR1 l1 o4g4.g8>c4.c8d8g8g2^8c8d8f8e8d8c4.<b8>c\n' +
-'TR2 l1 o3rg4.g8>c4.c8d8a8g8f8e4.d8e'];
+'TR2 l1 o3rg4.g8>c4.c8d8a8g8f8e4.d8e'
+, tracks: ['0','1']
+, createDate: new Date(2014,10,30, 22,28,05) // 2014-11-30 22:28:05
+, updateDate: new Date(2020,09,23, 22,22,51) // 2020-10-23 22:22:51
+}];
 
-            for (const mml of samples) {
-                const attr = getMmlAttribute(mml);
+            for (const sample of samples) {
+                const attr = getMmlAttribute(sample.mml);
                 attr.name = attr.title;
-                attr.tracks = tracks;
-                attr.createDate = createDate;
-                attr.updateDate = createDate;
+                attr.tracks = sample.tracks;
+                attr.createDate = sample.createDate;
+                attr.updateDate = sample.updateDate;
                 musics.push(attr);
-                writeMusicData(attr.name, mml);
+                writeMusicData(attr.name, sample.mml);
             }
             writeMusics(musics);
 
@@ -545,6 +555,10 @@ window.onload = function(event) {
             list,
             (id) => {
                 mmlEditor.value = readMusicData(id);
+                const index = findMuiscIndex(musics, id);
+                const music = musics[index];
+                track1Voice.value = music.tracks[0];
+                track2Voice.value = music.tracks[1];
             },
             (id) => {
                 removeMusicData(id);
@@ -963,9 +977,9 @@ window.onload = function(event) {
     }
 
     function moveLeftCaret() {
-        const contentTop = trackContentTop.innerText;
-        const contentSelection = trackContentSelection.innerText;
-        const contentBottom = trackContentBottom.innerText;
+        let contentTop = trackContentTop.innerText;
+        let contentSelection = trackContentSelection.innerText;
+        let contentBottom = trackContentBottom.innerText;
 
         if (trackSelectionDirection === DirectionForward && contentSelection.length > 0) {
             const last = contentSelection.length - 1;
@@ -1001,9 +1015,9 @@ window.onload = function(event) {
     }
 
     function moveRightCaret() {
-        const contentTop = trackContentTop.innerText;
-        const contentSelection = trackContentSelection.innerText;
-        const contentBottom = trackContentBottom.innerText;
+        let contentTop = trackContentTop.innerText;
+        let contentSelection = trackContentSelection.innerText;
+        let contentBottom = trackContentBottom.innerText;
 
         if (trackSelectionDirection === DirectionBackword && contentSelection.length > 0) {
             const ch = contentSelection.substring(0, 1);

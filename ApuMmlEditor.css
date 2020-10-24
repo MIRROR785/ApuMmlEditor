@@ -21,19 +21,19 @@ h3 {margin:0; padding-left:0.5em; background-color:steelblue; color:white; font-
 .attribute {display:inline-block;}
 
 #mml-menu {margin:0.25em 0; padding:0;}
-#mml-editor {width:98%; height:18em; font-family:monospace, serif; font-size:1em;}
+#mml-editor {width:98%; height:16em; font-family:monospace, serif; font-size:1em;}
 #mml-player {display:inline-block;}
 #audio-tempo {width:3em;}
 
 #track-menu {margin:0.25em 0; padding:0;}
 .menu-button {font-size:80%;}
 
-#track-view {margin:0.25em 0; padding:0; height:4em;}
-#track-tiny-editor {width:98%; height:3em; margin:0; padding:0.25em; font-family:monospace, serif; border:solid 1px black; overflow:auto;}
+#track-view {margin:0.25em 0; padding:0; height:3.5em;}
+#track-tiny-editor {width:98%; height:2.5em; margin:0; padding:0.25em; font-family:monospace, serif; border:solid 1px black; overflow:auto;}
 .track-content {font-family:monospace, serif; font-size:1em;}
 #track-content-selection {background-color:lightblue;}
 #track-content-caret {background-color:lightblue;}
-#track-text-editor {width:98%; height:3em; margin:0; font-family:monospace, serif; font-size:1em;}
+#track-text-editor {width:98%; height:2.5em; margin:0; font-family:monospace, serif; font-size:1em;}
 
 #keyboard-view {margin:0.25em;}
 .keyboard {margin:0.25em;}
@@ -44,6 +44,7 @@ h3 {margin:0; padding-left:0.5em; background-color:steelblue; color:white; font-
 .key-updown {padding:0; width:2em; font-size:0.8em;}
 .key-down {background-color:lightpink; color:black;}
 .key-fs {margin-left:2em;}
+.key-assign-replay {display:inline-block; font-size:70%;}
 #key-volume-up {margin-left:2.25em;}
 #key-octave-up {margin-left:2.25em;}
 #key-del {margin-left:0.5em;}
