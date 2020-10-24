@@ -20,7 +20,7 @@ MML commands are partially supported.
 
 License
 -------
-Copyright &copy; 2020 @MIRROR_  
+Copyright 2020 @MIRROR_  
 Distributed under the [MIT].  
 
 [MIT]: http://www.opensource.org/licenses/mit-license.php "MIT License"
