@@ -34,7 +34,7 @@ class NoiseDevice extends AudioDevice
      * @param int value 音色 (0:長周期, 1:短周期)
      */
     setVoiceValue(value) {
-        this.shortFreq = (value != 0);
+        this.shortFreq = (value > 0) ? true : false;
     }
 
     /**
@@ -52,29 +52,27 @@ class NoiseDevice extends AudioDevice
     getSample() {
         let noteNo = this.noteNo + this.offsetNote;
         this.tone = AudioConst.getNoiseFrequency(noteNo);
-        this.cycleDelta = this.tone * 2 * Math.PI / this.sampleRate;
+        this.cycleDelta = this.tone;
         this.amp = AudioDevice.BaseAmp * AudioConst.getValue(this.volume + this.offsetVolume, 0, 15) / 15;
 
-        let s = Math.sin(this.cycleCount);
-
+        let s = Math.sin(this.cycleCount * 2 * Math.PI / this.sampleRate);
         if (this.edge) {
             if (s < 0) {
                 this.edge = false;
             }
         } else if (s >= 0) {
             // ニコニコ大百科(仮) FC音源<https://dic.nicovideo.jp/a/fc%E9%9F%B3%E6%BA%90>
-            this.reg >>= 1;
-            this.reg |= ((this.reg ^ (this.reg >> (this.shortFreq ? 6 : 1))) & 1) << 15;
+            this.reg >>>= 1;
+            this.reg |= ((this.reg ^ (this.reg >>> (this.shortFreq ? 6 : 1))) & 1) << 15;
             this.edge = true;
         }
-        let v = (this.reg & 1) ? this.amp: -this.amp;
 
         this.cycleCount += this.cycleDelta;
-
-        if (this.cycleCount >= 2 * Math.PI) {
-            this.cycleCount -= 2 * Math.PI;
+        if (this.cycleCount >= this.sampleRate) {
+            this.cycleCount -= this.sampleRate;
         }
 
+        let v = ((this.reg & 1) > 0) ? this.amp: -this.amp;
         return v;
     }
 

@@ -122,28 +122,31 @@ class AudioConst
         /*     b  15804.266 */ 15804,
     ];
 
-    /** @var int[] ノイズ周数配列 */
-    static NoiseFrequencies = [
-        /* F: */ 0x7F2,
-        /* E: */ 0x3F9,
-        /* D: */ 0x1FC,
-        /* C: */ 0x17D,
-        /* B: */ 0x0FE,
-        /* A: */ 0x0BE,
-        /* 9: */ 0x07F,
-        /* 8: */ 0x065,
-        /* 7: */ 0x050,
-        /* 6: */ 0x040,
-        /* 5: */ 0x030,
-        /* 4: */ 0x020,
-        /* 3: */ 0x010,
-        /* 2: */ 0x008,
-        /* 1: */ 0x004,
-        /* 0: */ 0x002,
+    /** @var int[] ノイズタイマ期間配列 */
+    static NoiseTimerPeriods = [
+        /* F */ 4068,
+        /* E */ 2034,
+        /* D */ 1016,
+        /* C */  762,
+        /* B */  508,
+        /* A */  380,
+        /* 9 */  254,
+        /* 8 */  202,
+        /* 7 */  160,
+        /* 6 */  128,
+        /* 5 */   96,
+        /* 4 */   64,
+        /* 3 */   32,
+        /* 2 */   16,
+        /* 1 */    8,
+        /* 0 */    4,
     ];
 
     /** @var int 最大ノート番号 */
     static MaxNoteNo = AudioConst.Frequencies.length;
+
+    /** @var int CPUクロック */
+    static CpuClock = 1789773;
 
     /**
      * ノート番号を取得
@@ -180,7 +183,7 @@ class AudioConst
      * @return ノイズ周波数
      */
     static getNoiseFrequency(noiseNo) {
-        return 1789772.5 / AudioConst.NoiseFrequencies[noiseNo & 0x0f];
+        return Math.floor(AudioConst.CpuClock / AudioConst.NoiseTimerPeriods[noiseNo & 0x0f]);
     }
 
     /**
