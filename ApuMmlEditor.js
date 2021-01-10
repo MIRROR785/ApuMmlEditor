@@ -183,9 +183,9 @@ window.onload = function(event) {
 
     function getRemarks(attr) {
         const remarks = [];
-        if (attr.composer !== attr && attr.composer.length > 0) remarks.push('Composer:' + attr.composer);
-        if (attr.arranger !== attr && attr.arranger.length > 0) remarks.push('Arranger:' + attr.arranger);
-        if (attr.updateDate !== attr) remarks.push('Update:' + attr.updateDate.toLocaleString());
+        if (attr.composer !== null && attr.composer.length > 0) remarks.push('Composer:' + attr.composer);
+        if (attr.arranger !== null && attr.arranger.length > 0) remarks.push('Arranger:' + attr.arranger);
+        if (attr.updateDate !== null) remarks.push('Update:' + attr.updateDate.toLocaleString());
         return remarks;
     }
 

@@ -182,14 +182,14 @@ class MmlSequencer
                 } else {
                     let m = status.volume;
                     let o = status.octave;
-                    let l = status.length;
+                    l = status.length;
+
                     let i = status.index;
                     let k = track[i];
 
-                    let n;
                     let p;
 
-                    for (; ; k = track[i]) {
+                    for (;; k = track[i]) {
                         if (k === "\n") {
                             status.is_loop = true;
                             p = status.loop_begin[0];
