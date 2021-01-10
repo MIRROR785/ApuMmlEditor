@@ -57,4 +57,7 @@ class MmlConst
 
     /** @var bool ノートオン */
     static NOTE_ON  = true;
+
+    /** @var int 繰り返し最大ネスト数 */
+    static LOOP_NEST_MAX = 4;
 }
